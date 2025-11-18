@@ -1,5 +1,6 @@
 HEADERS += \
     $$PWD/dpo3012.h \
+    $$PWD/dsox3102t.h \
     $$PWD/prologixgpiblan.h \
     $$PWD/aeroflexattn.h \
     $$PWD/pindelaygeneratorpa.h \
@@ -28,6 +29,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/dpo3012.cpp \
+    $$PWD/dsox3102t.cpp \
     $$PWD/prologixgpiblan.cpp \
     $$PWD/aeroflexattn.cpp \
     $$PWD/pindelaygeneratorpa.cpp \

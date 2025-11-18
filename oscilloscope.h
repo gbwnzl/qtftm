@@ -20,6 +20,7 @@ signals:
 public slots:
     virtual void setResolution() =0;
     virtual void sendCurveQuery() =0;
+    virtual void configure() =0;
     virtual void setActive(bool active = true) { d_acquisitionActive = active; }
 
 protected:
@@ -31,6 +32,10 @@ protected:
 #include "dpo3012.h"
 class DPO3012;
 typedef DPO3012 OscilloscopeHardware;
+#elif QTFTM_OSCILLOSCOPE == 2
+#include "dsox3102t.h"
+class DSOX3102T;
+typedef DSOX3102T OscilloscopeHardware;
 #else
 #include "virtualscope.h"
 class VirtualScope;
