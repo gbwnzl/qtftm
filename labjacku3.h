@@ -2,7 +2,6 @@
 #define LABJACKU3_H
 
 #include "ioboard.h"
-
 #include "u3.h"
 
 class LabjackU3 : public IOBoard
@@ -24,7 +23,7 @@ public slots:
     void checkForTrigger();
 
 private:
-    HANDLE d_handle;
+    Qt::HANDLE d_handle;
     u3CalibrationInfo d_calInfo;
 
     int d_serialNo;

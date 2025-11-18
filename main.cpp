@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
     }
 
 	QApplication::setApplicationName(appName);
-    QApplication::setOrganizationDomain(QString("mcguirelab.mit.edu"));
-    QApplication::setOrganizationName(QString("McGuireLab"));
+    QApplication::setOrganizationDomain(QString("lweb.cfa.harvard.edu/amp/mccarthygroup/"));
+    QApplication::setOrganizationName(QString("McCarthyLab"));
 	QSettings::setPath(QSettings::NativeFormat,QSettings::SystemScope,appDataPath);
 	const QString lockFilePath = QString("%1/%2").arg(appDataPath).arg(QApplication::organizationName());
 

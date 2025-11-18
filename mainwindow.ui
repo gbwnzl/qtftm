@@ -693,6 +693,112 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="2" column="1">
+                  <widget class="QPushButton" name="polButton">
+                   <property name="text">
+                    <string>A</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_8">
+                   <property name="text">
+                    <string>Polarity</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QComboBox" name="lnPreampComboBox">
+                   <property name="maxVisibleItems">
+                    <number>10</number>
+                   </property>
+                  <item>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1E+1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2E+1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5E+1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1E+2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2E+2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5E+2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1E+3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2E+3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5E+3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1E+4</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2E+4</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5E+4</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>Gain</string>
+                  </property>
+                  </widget>
+                 </item>
                 </layout>
                </widget>
               </item>
@@ -1021,7 +1127,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>18</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAcquisition">

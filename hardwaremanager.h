@@ -16,6 +16,7 @@
 #include "motordriver.h"
 #include "pinswitchdrivedelaygenerator.h"
 #include "hvpowersupply.h"
+#include "lnpreamp.h"
 #include <QThread>
 #include "ioboard.h"
 
@@ -338,6 +339,9 @@ signals:
     void setDcVoltageFromUI(int);
     void dcVoltageUpdate(int);
 
+    void setLNGain(int);    //Set the Low Noise Preamp gain
+    void lnGainUpdate(int);    //Set the Low Noise Preamp gain
+
     void failure();
 
     void setMagnetFromUI(bool);
@@ -624,6 +628,7 @@ private:
     FtmSynthesizer *p_ftmSynth;
     DrSynthesizer *p_drSynth;
     HvPowerSupply *p_hvps;
+    LowNoisePreamp *p_lnpr;
 
     Scan d_currentScan;
     bool d_waitingForScanTune;
@@ -644,6 +649,7 @@ private:
     int measureCavityVoltage();
     void startCalibration();
     void shutUpMotorDriver(bool quiet);
+    void setDefaultLNPRGain(void);
 	
 };
 

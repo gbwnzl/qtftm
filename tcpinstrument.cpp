@@ -86,27 +86,29 @@ bool TcpInstrument::writeBinary(QByteArray dat)
 
 QByteArray TcpInstrument::queryCmd(QString cmd)
 {
-    if(p_socket->state() != QTcpSocket::ConnectedState)
     {
-        if(!connectSocket())
-        {
-            emit hardwareFailure();
-            emit logMessage(QString("Could not write query. Socket is not connected. (Query = %1)").arg(cmd));
-            return QByteArray();
-        }
+        if(!cmd.endsWith(d_readTerminator))
+            cmd += d_readTerminator;
+
+        // existing code
+    }
+
+    if(p_socket->state() != QTcpSocket::ConnectedState && !connectSocket()) {
+        emit hardwareFailure();
+        emit logMessage(QString("Socket not connected. Query = %1").arg(cmd));
+        return QByteArray();
     }
 
     if(p_socket->bytesAvailable())
         p_socket->readAll();
 
-    if(!writeCmd(cmd))
-    {
+    if(!writeCmd(cmd)) {
         emit hardwareFailure();
-        emit logMessage(QString("Could not write query to %1. (query = %2)").arg(d_prettyName).arg(cmd),QtFTM::LogError);
+        emit logMessage(QString("Could not write query. Query = %1").arg(cmd), QtFTM::LogError);
         return QByteArray();
     }
 
-	//write to socket here, return response
+    //write to socket here, return response
     if(!d_useTermChar || d_readTerminator.isEmpty())
     {
         if(!p_socket->waitForReadyRead(d_timeOut))

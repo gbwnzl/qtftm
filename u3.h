@@ -22,8 +22,13 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include "labjackusb.h"
 #include <QtGlobal>
+=======
+#include "labjacku3.h"
+
+>>>>>>> refs/remotes/origin/mit
 
 typedef unsigned char uint8;
 typedef unsigned short uint16;

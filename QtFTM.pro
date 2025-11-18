@@ -15,6 +15,7 @@
 
 
 QT       += core gui network
+QMAKE_CXXFLAGS += "-fno-sized-deallocation"
 CONFIG   += qt c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport printsupport
@@ -43,7 +44,12 @@ RESOURCES += \
     icons.qrc
 
 DISTFILES += \
+<<<<<<< HEAD
 #    config.pri \
+=======
+    config.pri \
+    config.pri \
+>>>>>>> refs/remotes/origin/mit
     config.pri.template \
     README
 
