@@ -43,7 +43,7 @@ RESOURCES += \
     icons.qrc
 
 DISTFILES += \
-    config.pri \
+#    config.pri \
     config.pri.template \
     README
 

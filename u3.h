@@ -17,12 +17,13 @@
 #ifndef U3_H_
 #define U3_H_
 
+#include <QApplication>
 #include <sys/time.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include "labjackusb.h"
-
+#include <QtGlobal>
 
 typedef unsigned char uint8;
 typedef unsigned short uint16;
@@ -108,26 +109,26 @@ uint8 extendedChecksum8( uint8 *b);
 //Returns the Checksum8 for a extended command data packet.
 //b = data packet for extended command
 
-HANDLE openUSBConnection( int localID);
+Qt::HANDLE openUSBConnection( int localID);
 //Opens a U3 connection over USB.  Returns NULL on failure, or a HANDLE on
 //success.
 //localID = the local ID or serial number of the U3 you want to open
 
-void closeUSBConnection( HANDLE hDevice);
+void closeUSBConnection( Qt::HANDLE hDevice);
 //Closes a HANDLE to a U3 device.
 
 long getTickCount();
 //Returns the number of milliseconds that has elasped since the system was
 //started.
 
-long getCalibrationInfo( HANDLE hDevice,
+long getCalibrationInfo( Qt::HANDLE hDevice,
                          u3CalibrationInfo *caliInfo);
 //Gets calibration information from memory blocks 0-4 of a U3.  Returns the
 //calibration information in a calibrationInfo structure.
 //hDevice = handle to a U3 device
 //caliInfo = structure where calibrarion information will be stored
 
-long getTdacCalibrationInfo( HANDLE hDevice,
+long getTdacCalibrationInfo( Qt::HANDLE hDevice,
                              u3TdacCalibrationInfo *caliInfo,
                              uint8 DIOAPinNum);
 //Gets calibration information from the EEPROM of a LJTick-DAC (LJTDAC).
@@ -323,7 +324,7 @@ long getTempKUncalibrated( uint16 bytesTemp,
 //bytesTemp = the 2 byte binary temperature that will be converted
 //kelvinTemp = the converted Kelvin temperature
 
-long I2C( HANDLE hDevice,
+long I2C( Qt::HANDLE hDevice,
           uint8 I2COptions,
           uint8 SpeedAdjust,
           uint8 SDAPinNum,
@@ -358,7 +359,7 @@ long I2C( HANDLE hDevice,
 
 /* Easy Functions (Similar to the easy functions in the Windows UD driver) */
 
-long eAIN( HANDLE Handle,
+long eAIN( Qt::HANDLE Handle,
            u3CalibrationInfo *CalibrationInfo,
            long ConfigIO,
            long *DAC1Enable,
@@ -404,7 +405,7 @@ long eAIN( HANDLE Handle,
 //Reserved (1&2) = Pass 0.
 
 
-long eDAC( HANDLE Handle,
+long eDAC( Qt::HANDLE Handle,
            u3CalibrationInfo *CalibrationInfo,
            long ConfigIO,
            long Channel,
@@ -430,7 +431,7 @@ long eDAC( HANDLE Handle,
 //         binary.
 //Reserved (1&2) = Pass 0.
 
-long eDI( HANDLE Handle,
+long eDI( Qt::HANDLE Handle,
           long ConfigIO,
           long Channel,
           long *State);
@@ -448,7 +449,7 @@ long eDI( HANDLE Handle,
 //          For U3 hardware versions 1.30, HV model, Channel needs to be 4-19,
 //State = Returns the state of the digital input.  0=False=Low and 1=True=High.
 
-long eDO( HANDLE Handle,
+long eDO( Qt::HANDLE Handle,
           long ConfigIO,
           long Channel,
           long State);
@@ -467,7 +468,7 @@ long eDO( HANDLE Handle,
 //State = The state to write to the digital output.  0=False=Low and
 //        1=True=High.
 
-long eTCConfig( HANDLE Handle,
+long eTCConfig( Qt::HANDLE Handle,
                 long *aEnableTimers,
                 long *aEnableCounters,
                 long TCPinOffset,
@@ -508,7 +509,7 @@ long eTCConfig( HANDLE Handle,
 //               2 elements.
 //Reserved (1&2) =  Pass 0.
 
-long eTCValues( HANDLE Handle,
+long eTCValues( Qt::HANDLE Handle,
                 long *aReadTimers,
                 long *aUpdateResetTimers,
                 long *aReadCounters,
@@ -555,7 +556,7 @@ long eTCValues( HANDLE Handle,
 
 /* Easy Function Helpers */
 
-long ehConfigIO( HANDLE hDevice,
+long ehConfigIO( Qt::HANDLE hDevice,
                  uint8 inWriteMask,
                  uint8 inTimerCounterConfig,
                  uint8 inDAC1Enable,
@@ -570,7 +571,7 @@ long ehConfigIO( HANDLE hDevice,
 //checksum and command bytes) as its parameter and performs a ConfigIO call
 //with the U3.  Returns -1 or errorcode (>1 value) on error, 0 on success.
 
-long ehConfigTimerClock( HANDLE hDevice,
+long ehConfigTimerClock( Qt::HANDLE hDevice,
                          uint8 inTimerClockConfig,
                          uint8 inTimerClockDivisor,
                          uint8 *outTimerClockConfig,
@@ -580,7 +581,7 @@ long ehConfigTimerClock( HANDLE hDevice,
 //and command bytes) as its parameter and performs a ConfigTimerClock call with
 //the U3.  Returns -1 or errorcode (>1 value) on error, 0 on success.
 
-long ehFeedback( HANDLE hDevice,
+long ehFeedback( Qt::HANDLE hDevice,
                  uint8 *inIOTypesDataBuff,
                  long inIOTypesDataSize,
                  uint8 *outErrorcode,
