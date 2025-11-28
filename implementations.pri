@@ -1,5 +1,6 @@
 HEADERS += \
     $$PWD/dpo3012.h \
+    $$PWD/dsox3102t.h \
     $$PWD/prologixgpiblan.h \
     $$PWD/aeroflexattn.h \
     $$PWD/pindelaygeneratorpa.h \
@@ -24,10 +25,14 @@ HEADERS += \
     $$PWD/glassmanfj02r60.h \
     $$PWD/n5183dr.h \
     $$PWD/n5183ftm.h \
-    $$PWD/qc9528.h
+    $$PWD/qc9528.h \
+    $$PWD/mks946.h \
+    $$PWD/srs560.h \
+    $$PWD/virtuallnpr.h
 
 SOURCES += \
     $$PWD/dpo3012.cpp \
+    $$PWD/dsox3102t.cpp \
     $$PWD/prologixgpiblan.cpp \
     $$PWD/aeroflexattn.cpp \
     $$PWD/pindelaygeneratorpa.cpp \
@@ -52,7 +57,10 @@ SOURCES += \
     $$PWD/glassmanfj02r60.cpp \
     $$PWD/n5183dr.cpp \
     $$PWD/n5183ftm.cpp \
-    $$PWD/qc9528.cpp
+    $$PWD/qc9528.cpp \
+    $$PWD/mks946.cpp \
+    $$PWD/srs560.cpp \
+    $$PWD/virtuallnpr.cpp
 
 equals(IOB, 1) {
 HEADERS += labjacku3.h \

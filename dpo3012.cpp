@@ -42,7 +42,8 @@ bool DPO3012::testConnection()
 
     if(resp.isEmpty())
     {
-        emit connected(false,QString("Did not respond to ID query."));
+        // emit connected(false,QString("Did not respond to ID query."));
+        emit connected(false,QString("FAILING HERE. Did not respond to ID query. Response: %1 (Hex: %2)").arg(QString(resp)).arg(QString(resp.toHex())));
         return false;
     }
 

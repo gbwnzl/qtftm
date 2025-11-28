@@ -17,7 +17,8 @@ SOURCES += hardwaremanager.cpp \
     $$PWD/gpibcontroller.cpp \
     $$PWD/custominstrument.cpp \
     $$PWD/virtualinstrument.cpp \
-    $$PWD/hvpowersupply.cpp
+    $$PWD/hvpowersupply.cpp \
+    $$PWD/lnpreamp.cpp
 
 HEADERS += hardwaremanager.h \
     oscilloscope.h \
@@ -38,4 +39,5 @@ HEADERS += hardwaremanager.h \
     $$PWD/gpibcontroller.h \
     $$PWD/custominstrument.h \
     $$PWD/virtualinstrument.h \
-    $$PWD/hvpowersupply.h
+    $$PWD/hvpowersupply.h \
+    $$PWD/lnpreamp.h

@@ -155,6 +155,7 @@ double Mks946::readFlowSetpoint(const int ch)
         return 0.0;
 
     QByteArray resp = mksQuery(QString("RRQ%1?").arg(ch+d_channelOffset));
+    emit logMessage(QString("OOOO %1").arg(QString(resp)),QtFTM::LogWarning);
     resp.chop(3);
     bool ok = false;
     double out = resp.mid(2).toDouble(&ok);
@@ -165,8 +166,8 @@ double Mks946::readFlowSetpoint(const int ch)
         return -1.0;
     }
     d_config.set(ch,QtFTM::FlowSettingSetpoint,out);
-    emit flowSetpointUpdate(ch,out);
-    return out;
+    emit flowSetpointUpdate(ch,out*2.0);
+    return out*2.0;
 }
 
 double Mks946::readPressureSetpoint()
@@ -295,9 +296,12 @@ void Mks946::setPressureControlMode(bool enabled)
 
         if(!mksWrite(QString("PID!ON")))
         {
-            emit logMessage(d_errorString,QtFTM::LogError);
-            emit hardwareFailure();
-            return;
+            if(!mksWrite(QString("PID!ON")))
+            {
+                emit logMessage(d_errorString,QtFTM::LogError);
+                emit hardwareFailure();
+                return;
+            }
         }
     }
     else
@@ -349,7 +353,7 @@ void Mks946::poll()
 void Mks946::initialize()
 {
     FlowController::initialize();
-    p_comm->setReadOptions(100,true,QByteArray(";FF"));
+    p_comm->setReadOptions(400,true,QByteArray(";FF"));
     p_comm->initialize();   //PBC
     testConnection();       //PBC
 }

@@ -112,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auto doubleVc = static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged);
     auto intVc = static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged);
+    auto intIc = static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged);
 
 	connect(ui->actionPause,&QAction::triggered,this,&MainWindow::pauseAcq);
 	connect(ui->actionResume,&QAction::triggered,this,&MainWindow::resumeAcq);
@@ -192,6 +193,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->attnControlSpinBox,intVc,p_hwm,&HardwareManager::setAttnFromUI);
     connect(p_hwm,&HardwareManager::attenUpdate,this,&MainWindow::setcvUpdate);
     connect(ui->dcControlSpinBox,intVc,p_hwm,&HardwareManager::setDcVoltageFromUI);
+    connect(ui->lnPreampComboBox,intIc,p_hwm,&HardwareManager::setLNGain);
+    connect(p_hwm,&HardwareManager::lnGainUpdate,this,&MainWindow::lnprGainUpdate);
     connect(p_hwm,&HardwareManager::dcVoltageUpdate,this,&MainWindow::dcVoltageUpdate);
     connect(ui->magnetOnOffButton,&QAbstractButton::toggled,p_hwm,&HardwareManager::setMagnetFromUI);
     connect(p_hwm,&HardwareManager::magnetUpdate,this,&MainWindow::magnetUpdate);
@@ -1258,6 +1261,13 @@ void MainWindow::dcVoltageUpdate(int v)
 	ui->dcControlSpinBox->blockSignals(true);
 	ui->dcControlSpinBox->setValue(v);
 	ui->dcControlSpinBox->blockSignals(false);
+}
+
+void MainWindow::lnprGainUpdate(int gain)
+{
+    ui->lnPreampComboBox->blockSignals(true);
+    ui->lnPreampComboBox->setCurrentIndex(gain);
+    ui->lnPreampComboBox->blockSignals(false);
 }
 
 void MainWindow::startBatchManager(BatchManager *bm)

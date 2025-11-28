@@ -21,7 +21,7 @@ double MotorDriver::calculateModePosition(double f, int mode)
     QSettings s(QSettings::SystemScope,QApplication::organizationName(),QApplication::applicationName());
     s.beginGroup(QString("motorDriver"));
 
-    double minLength = s.value(QString("minLength"),68.322).toDouble();
+    double minLength = s.value(QString("minLength"),67.1).toDouble();
     double maxLength = s.value(QString("maxLength"),72.893).toDouble();
     double halfLength = (minLength+maxLength)/2.0;
 
@@ -78,10 +78,10 @@ QPair<int, int> MotorDriver::calcRoughTune(double f, int mode)
 
     QSettings s(QSettings::SystemScope,QApplication::organizationName(),QApplication::applicationName());
     s.beginGroup(QString("motorDriver"));
-    double minLength = s.value(QString("minLength"),68.322).toDouble();
-    double maxLength = s.value(QString("maxLength"),72.893).toDouble();
+    double minLength = s.value(QString("minLength"),67.1).toDouble();
+    double maxLength = s.value(QString("maxLength"),72.1).toDouble();
     double halfLength = (minLength+maxLength)/2.0;
-    double l0 = s.value(QString("l0"),70.91421).toDouble();
+    double l0 = s.value(QString("l0"),69.4141).toDouble();
     double encoderCountsPerCm = s.value(QString("encoderCountsPerCm"),40000.0).toDouble();
     s.endGroup();
 
@@ -137,8 +137,8 @@ bool MotorDriver::isModeValid(double f, int mode)
 
     QSettings s(QSettings::SystemScope,QApplication::organizationName(),QApplication::applicationName());
     s.beginGroup(QString("motorDriver"));
-    double minLength = s.value(QString("minLength"),68.322).toDouble();
-    double maxLength = s.value(QString("maxLength"),72.893).toDouble();
+    double minLength = s.value(QString("minLength"),67.1).toDouble();
+    double maxLength = s.value(QString("maxLength"),72.1).toDouble();
     s.endGroup();
 
     if(mode < 1)
@@ -220,13 +220,13 @@ void MotorDriver::readCavitySettings()
     s.beginGroup(d_key);
 
     d_mirrorROC = s.value(QString("mirrorROC"),83.2048).toDouble();
-    d_minLength = s.value(QString("minLength"),68.322).toDouble();
-    d_maxLength = s.value(QString("maxLength"),72.893).toDouble();
+    d_minLength = s.value(QString("minLength"),67.1).toDouble();
+    d_maxLength = s.value(QString("maxLength"),72.1).toDouble();
     d_halfLength = (d_minLength+d_maxLength)/2.0;
-    d_l0 = s.value(QString("l0"),70.91421).toDouble();
+    d_l0 = s.value(QString("l0"),69.4141).toDouble();
     d_encoderCountsPerCm = s.value(QString("encoderCountsPerCm"),40000.0).toDouble();
-    d_calOffset = s.value(QString("calOffset"),13000).toInt();
-    d_calMode = s.value(QString("calMode"),47).toInt();
+    d_calOffset = s.value(QString("calOffset"),-10000).toInt();
+    d_calMode = s.value(QString("calMode"),46).toInt();
 
     if(!s.contains(QString("mirrorROC")))
         s.setValue(QString("mirrorROC"),d_mirrorROC);

@@ -56,6 +56,10 @@ protected:
 #include "mks647c.h"
 class MKS647C;
 typedef MKS647C FlowControllerHardware;
+#elif QTFTM_FLOWCONTROLLER == 2
+#include "mks946.h"
+class Mks946;
+typedef Mks946 FlowControllerHardware;
 #else
 #include "virtualflowcontroller.h"
 class VirtualFlowController;

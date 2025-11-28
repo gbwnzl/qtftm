@@ -528,6 +528,7 @@ bool AntonucciMotorDriver::fineTune(int targetVoltage, int width, double freq, i
 void AntonucciMotorDriver::calibrate()
 {
     readCavitySettings();
+    emit logMessage(QString("Read cavity settings, cal offset is %1.").arg(d_calOffset));
 
     QByteArray resp;
     //the mode we're looking for is usually around d_calOffset, but some searching might be needed

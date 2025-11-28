@@ -116,6 +116,11 @@ void HardwareManager::initializeHardware()
     connect(p_hvps,&HvPowerSupply::voltageUpdate,this,&HardwareManager::dcVoltageUpdate);
     d_hardwareList.append(qMakePair(p_hvps,nullptr));
 
+    p_lnpr = new LowNoisePreampHardware();
+    connect(this,&HardwareManager::setLNGain,p_lnpr,&LowNoisePreamp::setGain);
+    connect(p_lnpr,&LowNoisePreamp::gainUpdate,this,&HardwareManager::lnGainUpdate);
+    d_hardwareList.append(qMakePair(p_lnpr,nullptr));
+
 	//write arrays of the connected devices for use in the Hardware Settings menu
 	//first array is for all objects accessible to the hardware manager
 	QSettings s(QSettings::SystemScope,QApplication::organizationName(),QApplication::applicationName());
@@ -250,7 +255,7 @@ void HardwareManager::initializeHardware()
                 thread->start();
         }
     }
-
+    setDefaultLNPRGain();
 }
 
 void HardwareManager::connectionResult(HardwareObject *obj, bool success, QString msg)
@@ -633,11 +638,11 @@ void HardwareManager::prepareForScan(Scan s)
 	    finishPreparation(true);
     else
     {
-        //for batch attenuation scans, need to set attenuation before tuning
-        //TODO: write wrapper function for setAttn to handle threading
-        if(s.isDummy())
-            attn->setAttn(s.attenuation());
-	    tuneCavity(d_currentScan.ftFreq(),-1);
+    //for batch attenuation scans, need to set attenuation before tuning
+    //TODO: write wrapper function for setAttn to handle threading
+    if(s.isDummy())
+    attn->setAttn(s.attenuation());
+    tuneCavity(d_currentScan.ftFreq(),-1);
     }
 
 }
@@ -1133,3 +1138,10 @@ void HardwareManager::checkStatus()
 	emit allHardwareConnected(success);
 }
 
+void HardwareManager::setDefaultLNPRGain()
+{
+    if(p_lnpr->thread() == thread())
+        p_lnpr->setDefaultGain();
+    else
+        QMetaObject::invokeMethod(p_lnpr,"setDefaultGain");
+}

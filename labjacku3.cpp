@@ -1,4 +1,5 @@
 #include "labjacku3.h"
+#include "u3.h"
 
 LabjackU3::LabjackU3(QObject *parent) :
     IOBoard(parent), d_handle(nullptr), d_serialNo(3), d_cwLine(16), d_highBandLine(17),

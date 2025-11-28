@@ -107,6 +107,7 @@ public slots:
     void updatePulseLeds(const PulseGenConfig cc);
     void updatePulseLed(int index, QtFTM::PulseSetting s, QVariant val);
     void dcVoltageUpdate(int v);
+    void lnprGainUpdate(int gain);
 
 signals:
     void changeGasName(int, QString);

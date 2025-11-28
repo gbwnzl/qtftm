@@ -3,6 +3,7 @@
 //Example U3 helper functions.  Function descriptions are in the u3.h file.
 
 #include "u3.h"
+#include "qnamespace.h"
 #include <stdlib.h>
 #include <QtGlobal>
 
@@ -35,24 +36,24 @@ u3CalibrationInfo U3_CALIBRATION_INFO_DEFAULT = {
 };
 
 
-void normalChecksum(uint8 *b, int n)
+void normalChecksum(quint8 *b, int n)
 {
     b[0] = normalChecksum8(b, n);
 }
 
 
-void extendedChecksum(uint8 *b, int n)
+void extendedChecksum(quint8 *b, int n)
 {
     uint16 a;
 
     a = extendedChecksum16(b, n);
-    b[4] = (uint8)(a & 0xFF);
-    b[5] = (uint8)((a/256) & 0xFF);
+    b[4] = (quint8)(a & 0xFF);
+    b[5] = (quint8)((a/256) & 0xFF);
     b[0] = extendedChecksum8(b);
 }
 
 
-uint8 normalChecksum8(uint8 *b, int n)
+quint8 normalChecksum8(quint8 *b, int n)
 {
     int i;
     uint16 a, bb;
@@ -67,11 +68,11 @@ uint8 normalChecksum8(uint8 *b, int n)
     a = (a - 256*bb) + bb;
     bb = a / 256;
 
-    return (uint8)((a - 256*bb) + bb);
+    return (quint8)((a - 256*bb) + bb);
 }
 
 
-uint16 extendedChecksum16(uint8 *b, int n)
+uint16 extendedChecksum16(quint8 *b, int n)
 {
     int i, a = 0;
 
@@ -83,7 +84,7 @@ uint16 extendedChecksum16(uint8 *b, int n)
 }
 
 
-uint8 extendedChecksum8(uint8 *b)
+quint8 extendedChecksum8(quint8 *b)
 {
     int i, a, bb;
 
@@ -96,18 +97,18 @@ uint8 extendedChecksum8(uint8 *b)
     a=(a - 256*bb) + bb;
     bb=a / 256;
 
-    return (uint8)((a - 256*bb) + bb);
+    return (quint8)((a - 256*bb) + bb);
 }
 
 
-HANDLE openUSBConnection(int localID)
+Qt::HANDLE openUSBConnection(int localID)
 {
-    uint8 buffer[38];  //send size of 26, receive size of 38
+    quint8 buffer[38];  //send size of 26, receive size of 38
     uint16 checksumTotal = 0;
     uint32 numDevices = 0;
     uint32 dev;
     int i, serial;
-    HANDLE hDevice = 0;
+    Qt::HANDLE hDevice = 0;
 
     numDevices = LJUSB_GetDevCount(U3_PRODUCT_ID);
     if( numDevices == 0 )
@@ -130,12 +131,12 @@ HANDLE openUSBConnection(int localID)
                 checksumTotal = 0;
 
                 //Setting up a ConfigU3 command
-                buffer[1] = (uint8)(0xF8);
-                buffer[2] = (uint8)(0x0A);
-                buffer[3] = (uint8)(0x08);
+                buffer[1] = (quint8)(0xF8);
+                buffer[2] = (quint8)(0x0A);
+                buffer[3] = (quint8)(0x08);
 
                 for( i = 6; i < 38; i++ )
-                    buffer[i] = (uint8)(0x00);
+                    buffer[i] = (quint8)(0x00);
 
                 extendedChecksum(buffer, 26);
 
@@ -146,17 +147,17 @@ HANDLE openUSBConnection(int localID)
                     goto locid_error;
 
                 checksumTotal = extendedChecksum16(buffer, 38);
-                if( (uint8)((checksumTotal / 256) & 0xFF) != buffer[5] )
+                if( (quint8)((checksumTotal / 256) & 0xFF) != buffer[5] )
                     goto locid_error;
 
-                if( (uint8)(checksumTotal & 0xFF) != buffer[4] )
+                if( (quint8)(checksumTotal & 0xFF) != buffer[4] )
                     goto locid_error;
 
                 if( extendedChecksum8(buffer) != buffer[0] )
                     goto locid_error;
 
-                if( buffer[1] != (uint8)(0xF8) || buffer[2] != (uint8)(0x10) ||
-                    buffer[3] != (uint8)(0x08) )
+                if( buffer[1] != (quint8)(0xF8) || buffer[2] != (quint8)(0x10) ||
+                    buffer[3] != (quint8)(0x08) )
                     goto locid_error;
 
                 if( buffer[6] != 0 )
@@ -187,7 +188,7 @@ locid_error:
 }
 
 
-void closeUSBConnection(HANDLE hDevice)
+void closeUSBConnection(Qt::HANDLE hDevice)
 {
     LJUSB_CloseDevice(hDevice);
 }
@@ -229,16 +230,16 @@ invalid:
 }
 
 
-long getCalibrationInfo(HANDLE hDevice, u3CalibrationInfo *caliInfo)
+long getCalibrationInfo(Qt::HANDLE hDevice, u3CalibrationInfo *caliInfo)
 {
-    uint8 sendBuffer[8], recBuffer[40];
-    uint8 cU3SendBuffer[26], cU3RecBuffer[38];
+    quint8 sendBuffer[8], recBuffer[40];
+    quint8 cU3SendBuffer[26], cU3RecBuffer[38];
     int sentRec = 0, offset = 0, i = 0;
 
     /* Sending ConfigU3 command to get hardware version and see if HV */
-    cU3SendBuffer[1] = (uint8)(0xF8);  //Command byte
-    cU3SendBuffer[2] = (uint8)(0x0A);  //Number of data words
-    cU3SendBuffer[3] = (uint8)(0x08);  //Extended command number
+    cU3SendBuffer[1] = (quint8)(0xF8);  //Command byte
+    cU3SendBuffer[2] = (quint8)(0x0A);  //Number of data words
+    cU3SendBuffer[3] = (quint8)(0x08);  //Extended command number
 
     //Setting WriteMask0 and all other bytes to 0 since we only want to read the
     //response
@@ -265,8 +266,8 @@ long getCalibrationInfo(HANDLE hDevice, u3CalibrationInfo *caliInfo)
             goto readError1;
     }
 
-    if( cU3RecBuffer[1] != (uint8)(0xF8) || cU3RecBuffer[2] != (uint8)(0x10) ||
-        cU3RecBuffer[3] != (uint8)(0x08))
+    if( cU3RecBuffer[1] != (quint8)(0xF8) || cU3RecBuffer[2] != (quint8)(0x10) ||
+        cU3RecBuffer[3] != (quint8)(0x08))
         goto commandByteError;
 
     caliInfo->hardwareVersion = cU3RecBuffer[14] + cU3RecBuffer[13]/100.0;
@@ -278,11 +279,11 @@ long getCalibrationInfo(HANDLE hDevice, u3CalibrationInfo *caliInfo)
     for( i = 0; i < 5; i++ )
     {
         /* Reading block i from memory */
-        sendBuffer[1] = (uint8)(0xF8);  //Command byte
-        sendBuffer[2] = (uint8)(0x01);  //Cumber of data words
-        sendBuffer[3] = (uint8)(0x2D);  //Extended command number
+        sendBuffer[1] = (quint8)(0xF8);  //Command byte
+        sendBuffer[2] = (quint8)(0x01);  //Cumber of data words
+        sendBuffer[3] = (quint8)(0x2D);  //Extended command number
         sendBuffer[6] = 0;
-        sendBuffer[7] = (uint8)i;  //Blocknum = i
+        sendBuffer[7] = (quint8)i;  //Blocknum = i
         extendedChecksum(sendBuffer, 8);
 
         sentRec = LJUSB_Write(hDevice, sendBuffer, 8);
@@ -303,8 +304,8 @@ long getCalibrationInfo(HANDLE hDevice, u3CalibrationInfo *caliInfo)
                 goto readError1;
         }
 
-        if( recBuffer[1] != (uint8)(0xF8) || recBuffer[2] != (uint8)(0x11) ||
-            recBuffer[3] != (uint8)(0x2D) )
+        if( recBuffer[1] != (quint8)(0xF8) || recBuffer[2] != (quint8)(0x11) ||
+            recBuffer[3] != (quint8)(0x2D) )
             goto commandByteError;
 
         offset = i * 4;
@@ -338,13 +339,13 @@ commandByteError:
 }
 
 
-long getTdacCalibrationInfo( HANDLE hDevice, u3TdacCalibrationInfo *caliInfo, uint8 DIOAPinNum)
+long getTdacCalibrationInfo(Qt::HANDLE hDevice, u3TdacCalibrationInfo *caliInfo, quint8 DIOAPinNum)
 {
     int err;
-    uint8 options, speedAdjust, sdaPinNum, sclPinNum;
-    uint8 address, numByteToSend, numBytesToRec, errorcode;
-    uint8 bytesComm[1], bytesResp[32];
-    uint8 ackArray[4];
+    quint8 options, speedAdjust, sdaPinNum, sclPinNum;
+    quint8 address, numByteToSend, numBytesToRec, errorcode;
+    quint8 bytesComm[1], bytesResp[32];
+    quint8 ackArray[4];
 
     err = 0;
 
@@ -354,7 +355,7 @@ long getTdacCalibrationInfo( HANDLE hDevice, u3TdacCalibrationInfo *caliInfo, ui
                       //130 kHz)
     sdaPinNum = DIOAPinNum+1;  //SDAPinNum : FIO channel connected to pin DIOB
     sclPinNum = DIOAPinNum;  //SCLPinNum : FIO channel connected to pin DIOA
-    address = (uint8)(0xA0);  //Address : h0xA0 is the address for EEPROM
+    address = (quint8)(0xA0);  //Address : h0xA0 is the address for EEPROM
     numByteToSend = 1;  //NumI2CByteToSend : 1 byte for the EEPROM address
     numBytesToRec = 32;  //NumI2CBytesToReceive : getting 32 bytes starting at
                          //EEPROM address specified in I2CByte0
@@ -648,7 +649,7 @@ long getTempKUncalibrated(uint16 bytesTemp, double *kelvinTemp)
 }
 
 
-long I2C(HANDLE hDevice, uint8 I2COptions, uint8 SpeedAdjust, uint8 SDAPinNum, uint8 SCLPinNum, uint8 Address, uint8 NumI2CBytesToSend, uint8 NumI2CBytesToReceive, uint8 *I2CBytesCommand, uint8 *Errorcode, uint8 *AckArray, uint8 *I2CBytesResponse)
+long I2C(Qt::HANDLE hDevice, uint8 I2COptions, uint8 SpeedAdjust, uint8 SDAPinNum, uint8 SCLPinNum, uint8 Address, uint8 NumI2CBytesToSend, uint8 NumI2CBytesToReceive, uint8 *I2CBytesCommand, uint8 *Errorcode, uint8 *AckArray, uint8 *I2CBytesResponse)
 {
     uint8 *sendBuff, *recBuff;
     uint16 checksumTotal = 0;
@@ -771,7 +772,7 @@ cleanmem:
 }
 
 
-long eAIN(HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long *DAC1Enable, long ChannelP, long ChannelN, double *Voltage, long Range, long Resolution, long Settling, long Binary, long Reserved1, long Reserved2)
+long eAIN(Qt::HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long *DAC1Enable, long ChannelP, long ChannelN, double *Voltage, long Range, long Resolution, long Settling, long Binary, long Reserved1, long Reserved2)
 {
 	Q_UNUSED(Range)
 	Q_UNUSED(Reserved1)
@@ -898,7 +899,7 @@ long eAIN(HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long
 }
 
 
-long eDAC(HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long Channel, double Voltage, long Binary, long Reserved1, long Reserved2)
+long eDAC(Qt::HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long Channel, double Voltage, long Binary, long Reserved1, long Reserved2)
 {
 	Q_UNUSED(Binary)
 	Q_UNUSED(Reserved1)
@@ -962,7 +963,7 @@ long eDAC(HANDLE Handle, u3CalibrationInfo *CalibrationInfo, long ConfigIO, long
 }
 
 
-long eDI(HANDLE Handle, long ConfigIO, long Channel, long *State)
+long eDI(Qt::HANDLE Handle, long ConfigIO, long Channel, long *State)
 {
     uint8 sendDataBuff[4], recDataBuff[1];
     uint8 Errorcode, ErrorFrame, FIOAnalog, EIOAnalog;
@@ -1021,7 +1022,7 @@ long eDI(HANDLE Handle, long ConfigIO, long Channel, long *State)
 }
 
 
-long eDO(HANDLE Handle, long ConfigIO, long Channel, long State)
+long eDO(Qt::HANDLE Handle, long ConfigIO, long Channel, long State)
 {
     uint8 sendDataBuff[4];
     uint8 Errorcode, ErrorFrame, FIOAnalog, EIOAnalog;
@@ -1079,7 +1080,7 @@ long eDO(HANDLE Handle, long ConfigIO, long Channel, long State)
 }
 
 
-long eTCConfig(HANDLE Handle, long *aEnableTimers, long *aEnableCounters, long TCPinOffset, long TimerClockBaseIndex, long TimerClockDivisor, long *aTimerModes, double *aTimerValues, long Reserved1, long Reserved2)
+long eTCConfig(Qt::HANDLE Handle, long *aEnableTimers, long *aEnableCounters, long TCPinOffset, long TimerClockBaseIndex, long TimerClockDivisor, long *aTimerModes, double *aTimerValues, long Reserved1, long Reserved2)
 {
 	Q_UNUSED(Reserved1)
 	Q_UNUSED(Reserved2)
@@ -1185,7 +1186,7 @@ long eTCConfig(HANDLE Handle, long *aEnableTimers, long *aEnableCounters, long T
 }
 
 
-long eTCValues(HANDLE Handle, long *aReadTimers, long *aUpdateResetTimers, long *aReadCounters, long *aResetCounters, double *aTimerValues, double *aCounterValues, long Reserved1, long Reserved2)
+long eTCValues(Qt::HANDLE Handle, long *aReadTimers, long *aUpdateResetTimers, long *aReadCounters, long *aResetCounters, double *aTimerValues, double *aCounterValues, long Reserved1, long Reserved2)
 {
 	Q_UNUSED(Reserved1)
 	Q_UNUSED(Reserved2)
@@ -1255,7 +1256,7 @@ long eTCValues(HANDLE Handle, long *aReadTimers, long *aUpdateResetTimers, long 
 }
 
 
-long ehConfigIO(HANDLE hDevice, uint8 inWriteMask, uint8 inTimerCounterConfig, uint8 inDAC1Enable, uint8 inFIOAnalog, uint8 inEIOAnalog, uint8 *outTimerCounterConfig, uint8 *outDAC1Enable, uint8 *outFIOAnalog, uint8 *outEIOAnalog)
+long ehConfigIO(Qt::HANDLE hDevice, uint8 inWriteMask, uint8 inTimerCounterConfig, uint8 inDAC1Enable, uint8 inFIOAnalog, uint8 inEIOAnalog, uint8 *outTimerCounterConfig, uint8 *outDAC1Enable, uint8 *outFIOAnalog, uint8 *outEIOAnalog)
 {
     uint8 sendBuff[12], recBuff[12];
     uint16 checksumTotal;
@@ -1338,7 +1339,7 @@ long ehConfigIO(HANDLE hDevice, uint8 inWriteMask, uint8 inTimerCounterConfig, u
 }
 
 
-long ehConfigTimerClock(HANDLE hDevice, uint8 inTimerClockConfig, uint8 inTimerClockDivisor, uint8 *outTimerClockConfig, uint8 *outTimerClockDivisor)
+long ehConfigTimerClock(Qt::HANDLE hDevice, uint8 inTimerClockConfig, uint8 inTimerClockDivisor, uint8 *outTimerClockConfig, uint8 *outTimerClockDivisor)
 {
     uint8 sendBuff[10], recBuff[10];
     uint16 checksumTotal;
@@ -1416,7 +1417,7 @@ long ehConfigTimerClock(HANDLE hDevice, uint8 inTimerClockConfig, uint8 inTimerC
 }
 
 
-long ehFeedback(HANDLE hDevice, uint8 *inIOTypesDataBuff, long inIOTypesDataSize, uint8 *outErrorcode, uint8 *outErrorFrame, uint8 *outDataBuff, long outDataSize)
+long ehFeedback(Qt::HANDLE hDevice, uint8 *inIOTypesDataBuff, long inIOTypesDataSize, uint8 *outErrorcode, uint8 *outErrorFrame, uint8 *outDataBuff, long outDataSize)
 {
     uint8 *sendBuff, *recBuff;
     uint16 checksumTotal;
