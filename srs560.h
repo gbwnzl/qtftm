@@ -5,9 +5,9 @@
 
 class Srs560 : public LowNoisePreamp
 {
-
+    Q_OBJECT
 public:
-    Srs560();
+    Srs560(QObject *parent = nullptr);
 
     // HardwareObject interface
 public slots:

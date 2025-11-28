@@ -24,14 +24,14 @@ protected:
 };
 
 #ifdef QTFTM_LNPR
-#if QTFTM_LNPR==1
+#if QTFTM_LNPR == 1
 #include "srs560.h"
 class Srs560;
 typedef Srs560 LowNoisePreampHardware;
 #else
 #include "virtuallnpr.h"
 class VirtualLNPreamp;
-typedef VirtualLNPreamp LowNoisePreamp;
+typedef VirtualLNPreamp LowNoisePreampHardware;
 #endif
 #endif
 

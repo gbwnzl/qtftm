@@ -1,6 +1,8 @@
 #include "srs560.h"
 
-Srs560::Srs560() : d_gain(9)
+// Srs560::Srs560() : d_gain(9)
+Srs560::Srs560(QObject *parent) : d_gain(9)
+
 {
     d_subKey = QString("srs560");
     d_prettyName = QString("SRS 560 Low-Noise Preamplifier");
