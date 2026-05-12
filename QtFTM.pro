@@ -16,7 +16,7 @@
 
 QT       += core gui network
 QMAKE_CXXFLAGS += "-fno-sized-deallocation"
-CONFIG   += qt c++11
+CONFIG   += qt c++14 #Gabi Wenzel 2025/11/28 works with eigen5
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets serialport printsupport
 
