@@ -36,6 +36,10 @@ private:
 #include "aeroflexattn.h"
 class AeroflexAttn;
 typedef AeroflexAttn AttenuatorHardware;
+#elif QTFTM_ATTENUATOR == 2
+#include "vaunixattn.h"
+class VaunixAttn;
+typedef VaunixAttn AttenuatorHardware;
 #else
 #include "virtualattenuator.h"
 class VirtualAttenuator;

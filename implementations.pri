@@ -11,6 +11,7 @@ HEADERS += \
     $$PWD/hp8673ftm.h \
     $$PWD/hp8673dr.h \
     $$PWD/qc9518.h \
+    $$PWD/vaunixattn.h \
     $$PWD/virtualioboard.h \
     $$PWD/virtualscope.h \
     $$PWD/virtualgpibcontroller.h \
@@ -43,6 +44,7 @@ SOURCES += \
     $$PWD/hp8673ftm.cpp \
     $$PWD/hp8673dr.cpp \
     $$PWD/qc9518.cpp \
+    $$PWD/vaunixattn.cpp \
     $$PWD/virtualioboard.cpp \
     $$PWD/virtualscope.cpp \
     $$PWD/virtualgpibcontroller.cpp \
@@ -64,7 +66,8 @@ SOURCES += \
 
 equals(IOB, 1) {
 HEADERS += labjacku3.h \
-    u3.h
+    u3.h \
+    ldadrvr.h
 
 SOURCES += labjacku3.cpp \
     u3.cpp
